@@ -11,7 +11,6 @@ import pytesseract
 import json
 import create_passport_pattern as cpp
 
-
 def image_to_grayscale(image):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     ret, thresh = cv2.threshold(gray, 115, 255, cv2.THRESH_BINARY)
@@ -62,9 +61,9 @@ pass_pattern = cpp.load_passport_pattern("passport_pattern_01.json")
 
 # crop Паспорт выдан
 cropped = crop_area_by_name("Issued", pass_pattern, img)
-issued = pytesseract.image_to_string(cropped)
+issued = pytesseract.image_to_string(cropped, lang="rus")
 #cv2.imshow("Issued", cropped)
-
+print(issued[:-1])
 # crop Дата выдачи
 cropped = crop_area_by_name("Date of issue", pass_pattern, img)
 date_of_issue = pytesseract.image_to_string(cropped);
@@ -107,29 +106,32 @@ serie_number = pytesseract.image_to_string(cropped2);
 print("Surname") 
 cropped = crop_area_by_name("Surname", pass_pattern, img)   
 #cropped4 = img[1120:1190, 600:1300] 
-surname = pytesseract.image_to_string(cropped);
+surname = pytesseract.image_to_string(cropped, lang="rus");
 #cv2.imshow("Surname", cropped)
+print(surname[:-1])
 
 # crop Имя
 print("Name")    
 cropped = crop_area_by_name("Name", pass_pattern, img)
 #cropped4 = img[1280:1350, 600:1300] 
-name = pytesseract.image_to_string(cropped);
+name = pytesseract.image_to_string(cropped, lang="rus");
 #cv2.imshow("Name", cropped)
+print(name[:-1])
 
 # crop Отчество
 print("Second Name")   
 cropped = crop_area_by_name("Second name", pass_pattern, img)
 #cropped4 = img[1350:1430, 600:1300] 
-second_name = pytesseract.image_to_string(cropped);
+second_name = pytesseract.image_to_string(cropped, lang="rus");
 #cv2.imshow("Second name", cropped)
-
+print(second_name[:-1])
 
 # crop Пол
 print("Sex")   
 cropped = crop_area_by_name("Sex", pass_pattern, img)
 #cropped4 = img[1440:1500, 530:700] 
-sex = pytesseract.image_to_string(cropped);
+sex = pytesseract.image_to_string(cropped, lang="rus");
+print(sex[:-1])
 #cv2.imshow("Sex", cropped)  
   
 # crop Дата рождения
@@ -139,7 +141,7 @@ cropped = crop_area_by_name("Date of birth", pass_pattern, img)
 gray = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(gray, 115, 255, cv2.THRESH_BINARY)
 cropped = cv2.erode(thresh, np.ones((3, 3), np.uint8), iterations=0)   
-date_of_birth = pytesseract.image_to_string(cropped);
+date_of_birth = pytesseract.image_to_string(cropped, lang="rus");
 #cv2.imshow("Date of birth", cropped)      
 
 # crop Место рождения
@@ -149,8 +151,12 @@ cropped = crop_area_by_name("Place of birth", pass_pattern, img)
 gray = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
 ret, thresh = cv2.threshold(gray, 115, 255, cv2.THRESH_BINARY)
 cropped = cv2.erode(thresh, np.ones((3, 3), np.uint8), iterations=0)   
-place_of_birth = pytesseract.image_to_string(cropped);
-cv2.imshow("Date of birth", cropped)      
+place_of_birth = pytesseract.image_to_string(cropped, lang="rus");
+print(place_of_birth[:-1])
+#cv2.imshow("Date of birth", cropped)      
+
+
+# Сохраняем распознанные данные в json
     
 to_json = {
     "Number" : serie_number[:-1],
@@ -175,4 +181,5 @@ print(to_json)
 #cv2.imshow("Input", img)
 #cv2.imshow("Enlarged", img_erode)
 
-cv2.waitKey(0)
+
+#cv2.waitKey(0)
